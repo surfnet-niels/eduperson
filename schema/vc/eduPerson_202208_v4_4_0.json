@@ -1,0 +1,278 @@
+{
+    "$id":"https://refeds.org/schemas/vc/eduPerson_202208_v4_4_0.json",
+    "$schema":"https://json-schema.org/draft/2020-12/schema",
+    "$comment":"This schema implements the eduPerson schema version 4.4.0 (2022-08) - https://wiki.refeds.org/display/STAN/eduPerson+%28202208%29+v4.4.0. This schema is maintained by REFEDs (https://refeds.org). The mission of REFEDS (the Research and Education FEDerations group) is to be the voice that articulates the mutual needs of research and education identity federations worldwide. The group represents the requirements of research and education.",
+    "title":"eduPersonCredential",
+    "description":"Schema for verifiable credential claims describing a user in the context of eduPerson",
+    "type":"object",
+    "properties":{
+        "credentialSubject":{
+            "type":"object",
+            "properties":{
+                "eduPersonAffiliation":{
+                    "type":"string",
+                    "description":"eduPerson per Internet2 and EDUCAUSE",
+                    "enum":[
+                        "faculty",
+                        "student",
+                        "staff",
+                        "alum",
+                        "member",
+                        "affiliate",
+                        "employee",
+                        "library-walk-in"
+                    ]
+                },
+                "eduPersonEntitlement":{
+                    "type":"string",
+                    "description":"URI (either URN or URL) that indicates a set of rights to specific resources.",
+                    "format":"uri"
+                },
+                "eduPersonNickname":{
+                    "type":"string",
+                    "description":"Person's nickname, or the informal name by which they are accustomed to be hailed."
+                },
+                "eduPersonOrgDN":{
+                    "type":"string",
+                    "description":"The distinguished name (DN) of the directory entry representing the institution with which the person is associated.The directory entry pointed to by this dn should be represented in the X.521(2001) 'organization' object class The attribute set for organization is defined as follows: o (Organization Name, required}"
+                },
+                "eduPersonOrgUnitDN":{
+                    "type":"string",
+                    "description":"The distinguished name(s) (DN) of the directory entries representing the person's Organizational Unit(s). May be multivalued, as for example, in the case of a faculty member with appointments in multiple departments or a person who is a student in one department and an employee in another."
+                },
+                "eduPersonPrimaryAffiliation":{
+                    "type":"string",
+                    "description":"Specifies the person's primary relationship to the institution in broad categories such as student, faculty, staff, alum, etc"
+                },
+                "eduPersonPrimaryOrgUnitDN":{
+                    "type":"string",
+                    "description":"The distinguished name (DN) of the directory entry representing the person's primary Organizational Unit(s)."
+                },
+                "eduPersonPrincipalName":{
+                    "type":"string",
+                    "description":"A scoped identifier for a person. It should be represented in the form 'user@scope' where 'user' is a name-based identifier for the person and where the 'scope' portion MUST be the administrative domain of the identity system where the identifier was created and assigned. Each value of 'scope' defines a namespace within which the assigned identifiers MUST be unique. Given this rule, if two eduPersonPrincipalName (ePPN) values are the same at a given point in time, they refer to the same person. There must be one and only one '@' sign in valid values of eduPersonPrincipalName.",
+                    "pattern":"^\\S+@\\S+\\.\\S+$"
+                },
+                "eduPersonPrincipalNamePrior":{
+                    "type":"string",
+                    "description":"Each value of this multi-valued attribute represents an ePPN (eduPersonPrincipalName) value that was previously associated with the entry. The values MUST NOT include the currently valid ePPN value. There is no implied or assumed order to the values. This attribute MUST NOT be populated if ePPN values are ever reassigned to a different entry (after, for example, a period of dormancy). That is, they MUST be unique in space and over time.",
+                    "pattern":"^\\S+@\\S+\\.\\S+$"
+                },
+                "eduPersonScopedAffiliation":{
+                    "type":"string",
+                    "description":"Specifies the person's affiliation within a particular security domain in broad categories such as student, faculty, staff, alum, etc. The values consist of a left and right component separated by an '@' sign. The left component is one of the values from the eduPersonAffiliation controlled vocabulary.This right-hand side syntax of eduPersonScopedAffiliation intentionally matches that used for the right-hand side values for eduPersonPrincipalName. The 'scope' portion MUST be the administrative domain to which the affiliation applies. Multiple '@' signs are not recommended, but in any case, the first occurrence of the '@' sign starting from the left is to be taken as the delimiter between components. Thus, user identifier is to the left, security domain to the right of the first '@'. This parsing rule conforms to the POSIX 'greedy' disambiguation method in regular expression processing.",
+                    "pattern":"^\\S+@\\S+\\.\\S+$"
+                },
+                "eduPersonTargetedID":{
+                    "type":"string",
+                    "description":"A persistent, non-reassigned, opaque identifier for a principal.",
+                    "deprecated":true
+                },
+                "eduPersonAssurance":{
+                    "type":"array",
+                    "description":"Set of URIs that assert compliance with specific standards for identity assurance.",
+                    "anyof":{
+                        "type":"uri"
+                    }
+                },
+                "eduPersonUniqueId":{
+                    "type":"string",
+                    "description":"A long-lived, non re-assignable, omnidirectional identifier suitable for use as a principal identifier by authentication providers or as a unique external key by applications."
+                },
+                "eduPersonOrcid":{
+                    "type":"string",
+                    "description":"ORCID iDs are persistent digital identifiers for individual researchers. Their primary purpose is to unambiguously and definitively link them with their scholarly work products. ORCID iDs are assigned, managed and maintained by the ORCID organization."
+                },
+                "eduPersonAnalyticsTag":{
+                    "type":"string",
+                    "description":"An opaque string that aggregates the use of a service by a set of subjects for the purpose of reporting or analytics by the originating organization."
+                },
+                "eduPersonDisplayPronouns":{
+                    "type":"string",
+                    "description":"Text representing the word(s) a person prefers as their personal pronoun(s). Multiple personal pronouns should include separators to support human readability, e.g., ‘Ashe’, ‘she/her/hers’, or ‘ella, ellas’, or ‘היא’, or ‘She/ella*, O /او , 她/她, היא’."
+                },
+                "audio":{
+                    "type":"string",
+                    "description":"RFC1274 notes that the proprietary format they recommend is 'interim' only."
+                },
+                "cn":{
+                    "type":"string",
+                    "description":"Common name. According to RFC4519, The 'cn' ('commonName' in X.500) attribute type contains names of an object. Each name is one value of this multi-valued attribute. If the object corresponds to a person, it is typically the person's full name."
+                },
+                "description":{
+                    "type":"string",
+                    "description":"Open-ended; whatever the person or the directory manager puts here. According to RFC4519, The 'description' attribute type contains human-readable descriptive phrases about the object. Each description is one value of this multi-valued attribute."
+                },
+                "displayName":{
+                    "type":"string",
+                    "description":"The name(s) that should appear in white-pages-like applications for this person. From RFC2798 description: 'preferred name of a person to be used when displaying entries.'"
+                },
+                "facsimileTelephoneNumber":{
+                    "type":"array",
+                    "description":"According to RFC4519: 'The 'facsimileTelephoneNumber' attribute type contains telephone numbers (and, optionally, the parameters) for facsimile terminals. Each telephone number is one value of this multi-valued attribute.'",
+                    "anyof":{
+                        "type":[
+                            "string",
+                            "null"
+                        ],
+                        "minLength":10,
+                        "maxLength":20,
+                        "pattern":"^(\\([0-9]{3}\\))?[0-9]{3}-[0-9]{4}$"
+                    }
+                },
+                "givenName":{
+                    "type":"string",
+                    "description":"From RFC4519 description: 'The 'givenName' attribute type contains name strings that are the part of a person's name that is not their surname. Each string is one value of this multi-valued attribute.'"
+                },
+                "homePhone":{
+                    "type":"array",
+                    "description":"From RFC1274 description: 'The [homePhone] attribute type specifies a home telephone number associated with a person.'",
+                    "anyof":{
+                        "type":[
+                            "string",
+                            "null"
+                        ],
+                        "minLength":10,
+                        "maxLength":20,
+                        "pattern":"^(\\([0-9]{3}\\))?[0-9]{3}-[0-9]{4}$"
+                    }
+                },
+                "homePostalAddress":{
+                    "type":"string",
+                    "description":"From RFC1274 description: 'The Home postal address attribute type specifies a home postal address for an object. This should be limited to up to 6 lines of 30 characters each.' Semantics Home address. OrgPerson has a PostalAddress that complements this attribute."
+                },
+                "initials":{
+                    "type":"string",
+                    "description":"'The 'initials' attribute type contains strings of initials of some or all of an individual's names, except the surname(s). Each string is one value of this multi-valued attribute.'"
+                },
+                "jpegPhoto":{
+                    "type":"string",
+                    "description":"Follow inetOrgPerson definition of RFC2798: 'Used to store one or more images of a person using the JPEG File Interchange Format [JFIF].'"
+                },
+                "localityName":{
+                    "type":"string",
+                    "description":"According to RFC4519, 'The 'l' ('localityName' in X.500) attribute type contains names of a locality or place, such as a city, county, or other geographic region. Each name is one value of this multi-valued attribute.'"
+                },
+                "labeledURI":{
+                    "type":"array",
+                    "description":"Follow inetOrgPerson definition of RFC2079: 'Uniform Resource Identifier with optional label.'",
+                    "anyof":{
+                        "type":"uri"
+                    }
+                },
+                "mail":{
+                    "type":"string",
+                    "description":"From RFC4524: The 'mail' (rfc822mailbox) attribute type holds Internet mail addresses in Mailbox [RFC2821] form (e.g., user@example.com).",
+                    "format":"email"
+                },
+                "manager":{
+                    "type":"string",
+                    "description":"From RFC4524: 'The 'manager' attribute specifies managers, by distinguished name, of the person (or entity).'"
+                },
+                "mobile":{
+                    "type":"array",
+                    "description":"From RFC4524: 'The 'mobile' (mobileTelephoneNumber) attribute specifies mobile telephone numbers (e.g., '+1 775 555 6789' associated with a person (or entity).'",
+                    "anyof":{
+                        "type":[
+                            "string",
+                            "null"
+                        ],
+                        "minLength":10,
+                        "maxLength":20,
+                        "pattern":"^(\\([0-9]{3}\\))?[0-9]{3}-[0-9]{4}$"
+                    }
+                },
+                "o":{
+                    "type":"string",
+                    "description":"Standard name of the top-level organization (institution) with which this person is associated."
+                },
+                "ou":{
+                    "type":"string",
+                    "description":"Organizational unit(s). According to X.520(2000), 'The Organizational Unit Name attribute type specifies an organizational unit. When used as a component of a directory name it identifies an organizational unit with which the named object is affiliated.'"
+                },
+                "pager":{
+                    "type":"array",
+                    "description":"From RFC4524: 'The 'pager' (pagerTelephoneNumber) attribute specifies pager telephone numbers (e.g., '+1 775 555 5555') for an object.'",
+                    "anyof":{
+                        "type":[
+                            "string",
+                            "null"
+                        ],
+                        "minLength":10,
+                        "maxLength":20,
+                        "pattern":"^(\\([0-9]{3}\\))?[0-9]{3}-[0-9]{4}$"
+                    }
+                },
+                "postalAddress":{
+                    "type":"string",
+                    "description":"Campus or office address. inetOrgPerson has a homePostalAddress that complements this attribute. X.520(2000) reads: 'The Postal Address attribute type specifies the address information required for the physical postal delivery to an object.'"
+                },
+                "postalCode":{
+                    "type":"string",
+                    "description":"Follow X.500(2001): 'The postal code attribute type specifies the postal code of the named object. If this attribute value is present, it will be part of the object's postal address.' Zipcode in USA, postal code for other countries."
+                },
+                "postOfficeBox":{
+                    "type":"string",
+                    "description":"From RFC4519: 'The 'postOfficeBox' attribute type contains postal box identifiers that a Postal Service uses when a customer arranges to receive mail at a box on the premises of the Postal Service. Each postal box identifier is a single value of this multi-valued attribute.'"
+                },
+                "preferredLanguage":{
+                    "type":"string",
+                    "description":"Follow inetOrgPerson definition of RFC2798: 'preferred written or spoken language for a person.'"
+                },
+                "seeAlso":{
+                    "type":"string",
+                    "description":"From RFC4519: The 'seeAlso' attribute type contains the distinguished names of objects that are related to the subject object. Each related object name is one value of this multi-valued attribute."
+                },
+                "sn":{
+                    "type":"string",
+                    "description":"Surname or family name. From RFC4519: 'The 'sn' ('surname' in X.500) attribute type contains name strings for the family names of a person. Each string is one value of this multi-valued attribute.'"
+                },
+                "st":{
+                    "type":"string",
+                    "description":"Abbreviation for state or province name. Format: The values should be coordinated on a national level. If well-known shortcuts exist, like the two-letter state abbreviations in the US, these abbreviations are preferred over longer full names. From RFC4519: 'The 'st' ('stateOrProvinceName' in X.500) attribute type contains the full names of states or provinces. Each name is one value of this multi-valued attribute.'"
+                },
+                "street":{
+                    "type":"string",
+                    "description":"From RFC4519: 'The 'street' ('streetAddress' in X.500) attribute type contains site information from a postal address (i.e., the street name, place, avenue, and the house number). Each street is one value of this multi-valued attribute.'"
+                },
+                "telephoneNumber":{
+                    "type":"array",
+                    "description":"Office/campus phone number. Attribute values should comply with the international format specified in ITU Recommendation E.123: e.g., '+44 71 123 4567.'",
+                    "anyof":{
+                        "type":[
+                            "string",
+                            "null"
+                        ],
+                        "minLength":10,
+                        "maxLength":20,
+                        "pattern":"^(\\([0-9]{3}\\))?[0-9]{3}-[0-9]{4}$"
+                    }
+                },
+                "title":{
+                    "type":"string",
+                    "description":"From RFC4519: 'The 'title' attribute type contains the title of a person in their organizational context. Each title is one value of this multi-valued attribute.' "
+                },
+                "uid":{
+                    "type":"string",
+                    "description":"From RFC4519: 'The 'uid' ('userid' in RFC1274) attribute type contains computer system login names associated with the object. Each name is one value of this multi-valued attribute.'"
+                },
+                "uniqueIdentifier":{
+                    "type":"string",
+                    "description":"From RFC4524: 'The 'uniqueIdentifier' attribute specifies a unique identifier for an object represented in the Directory. The domain within which the identifier is unique and the exact semantics of the identifier are for local definition. For a person, this might be an institution- wide payroll number. For an organizational unit, it might be a department code.'"
+                },
+                "userPassword":{
+                    "type":"string",
+                    "description":"This attribute identifies the entry's password and encryption method in the following format: {encryption method}encrypted password."
+                },
+                "userSMIMECertificate":{
+                    "type":"string",
+                    "description":"An X.509 certificate specifically for use in S/MIME applications (see RFCs 2632, 2633 and 2634)."
+                },
+                "x500uniqueIdentifier":{
+                    "type":"string",
+                    "description":"Defined originally in X.509(96) and included in RFC2256."
+                }
+            }
+        }
+    }
+}
