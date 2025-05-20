@@ -40,7 +40,30 @@ def write_file(contents, filepath, mkpath=True, overwrite=False, type='txt'):
    
    f.close()
 
+def replace_capitals(s):
+    return ''.join(['' + ("_" + char.lower()) if char.isupper() else char for char in s]).strip()
 
+def covert_schemaname(attributeName):
+   # Attributes need to be rename to claims
+   # as a general rule of thumb:
+   #
+   # eduPerson, voPerson and Schac schema names are just lowercased ad get added an underscore
+   #
+   # for the attrbute name: if a captical is found, it is replaced with a lower and prefixed with an underscore.
+   #
+   # sp eduPersonScopedAffiliation becomes: eduperson_scoped_affiliation
+   # 
+   s= attributeName
+
+   if s.startswith('eduPerson'):
+      return ("eduperson" + replace_capitals(s[9:]).replace("_i_d", "_id").replace("_d_n", "_dn"))
+   elif s.startswith('voPerson'):
+      return ("voperson" + replace_capitals(s[7:]).replace("_i_d", "_id").replace("_d_n", "_dn"))
+   elif s.startswith('Schac'):
+      return ("schac" + replace_capitals(s[5:]).replace("_i_d", "_id").replace("_d_n", "_dn"))
+   else:
+      return (replace_capitals(s).replace("_u_r_i", "_uri").replace("_s_m_i_m_e", "_smime"))
+   
 def main(argv):
    schemaFile = "eduPerson_202208_v4_4_0.json"
 
@@ -71,37 +94,39 @@ def main(argv):
    att = scimSchema['attributes']
 
    for i in range(len(att)):
-      object_props[att[i]['name']] = {
+      name = covert_schemaname(att[i]['name'])
+
+      object_props[name] = {
          "type": att[i]['type'],
          "description": att[i]['description'],
       }
       # handle enums
       if 'canonicalValues' in att[i].keys():
-         object_props[att[i]['name']]['enum'] = att[i]['canonicalValues']
+         object_props[name]['enum'] = att[i]['canonicalValues']
 
       # TODO: validate these
       # TODO: we still have several format and pattern definitions missing
       match att[i]['name']:
          case "mail":
-            object_props[att[i]['name']]['format'] = "email"
+            object_props[name]['format'] = "email"
 
          case "eduPersonEntitlement":
-            object_props[att[i]['name']]['format'] = "uri"
+            object_props[name]['format'] = "uri"
 
          case "eduPersonPrincipalName" | "eduPersonPrincipalNamePrior" | "eduPersonScopedAffiliation":
-            object_props[att[i]['name']]['pattern'] = "^\\S+@\\S+\\.\\S+$"
+            object_props[name]['pattern'] = "^\\S+@\\S+\\.\\S+$"
          
          case "eduPersonTargetedID":
-            object_props[att[i]['name']]['description'] = 'A persistent, non-reassigned, opaque identifier for a principal.'
-            object_props[att[i]['name']]['deprecated'] = True
+            object_props[name]['description'] = 'A persistent, non-reassigned, opaque identifier for a principal.'
+            object_props[name]['deprecated'] = True
 
          case "eduPersonAssurance" | "labeledURI":
-            object_props[att[i]['name']]['type'] = "array"
-            object_props[att[i]['name']]['anyof'] =  { "type": "uri" }
+            object_props[name]['type'] = "array"
+            object_props[name]['anyof'] =  { "type": "uri" }
       
          case "homePhone" | "facsimileTelephoneNumber" | "mobile" | "pager" | "telephoneNumber":
-            object_props[att[i]['name']]['type'] = "array"
-            object_props[att[i]['name']]['anyof'] =  {
+            object_props[name]['type'] = "array"
+            object_props[name]['anyof'] =  {
                "type": ["string", "null"],
                "minLength": 10,
                "maxLength": 20,
